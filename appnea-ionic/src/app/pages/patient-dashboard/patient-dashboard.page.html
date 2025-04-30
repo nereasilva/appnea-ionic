@@ -1,0 +1,119 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>APPNEA - Patient Dashboard</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">
+        <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="dashboard-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Welcome, {{ currentUser?.name || currentUser?.email }}</ion-card-title>
+              <ion-card-subtitle>Your Sleep Health Dashboard</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p>
+                Monitor your sleep apnea data, chat with your doctor, and get personalized advice from our assistant.
+              </p>
+              <ion-button 
+                expand="block" 
+                color="secondary" 
+                (click)="generateMockData()" 
+                [disabled]="isLoading"
+                class="ion-margin-top">
+                <ion-icon name="refresh-outline" slot="start"></ion-icon>
+                Generate Sample Data
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <!-- Health Data Section -->
+      <ion-row>
+        <ion-col size="12">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Your Health Data</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div *ngIf="isLoading" class="loading-container">
+                <ion-spinner name="circles"></ion-spinner>
+                <p>Loading your health data...</p>
+              </div>
+
+              <div *ngIf="!isLoading && Object.keys(dataByType).length === 0" class="empty-data">
+                <ion-icon name="analytics-outline" size="large"></ion-icon>
+                <p>No health data available yet. Click "Generate Sample Data" to see example visualizations.</p>
+              </div>
+
+              <ion-grid *ngIf="!isLoading && Object.keys(dataByType).length > 0">
+                <ion-row>
+                  <ion-col size="12" size-md="6" size-lg="4" *ngFor="let type of (Object.keys(dataByType))">
+                    <app-simple-graph
+                      [data]="dataByType[type]"
+                      [title]="type"
+                      [color]="type === 'HeartRate' ? '#eb445a' : type === 'SpO2' ? '#3880ff' : '#2dd36f'">
+                    </app-simple-graph>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+
+      <!-- Communication Section -->
+      <ion-row>
+        <ion-col size="12" size-md="6">
+          <ion-card class="full-height-card">
+            <ion-card-header>
+              <ion-card-title>APPNEA Assistant</ion-card-title>
+              <ion-card-subtitle>Get answers about sleep apnea</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <app-chatbot></app-chatbot>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="12" size-md="6">
+          <ion-card class="full-height-card">
+            <ion-card-header>
+              <ion-card-title>Chat with Doctor</ion-card-title>
+              <ion-card-subtitle>Direct communication with your healthcare provider</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item>
+                <ion-label>Select Doctor</ion-label>
+                <ion-select 
+                  placeholder="Choose a doctor" 
+                  (ionChange)="selectDoctor($event)"
+                  interface="action-sheet">
+                  <ion-select-option *ngFor="let doctor of doctors" [value]="doctor._id">
+                    {{ doctor.name || doctor.email }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+              
+              <div class="chat-wrapper">
+                <app-chat 
+                  [otherUserId]="selectedDoctorId" 
+                  [otherUserName]="selectedDoctorName">
+                </app-chat>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -1,0 +1,20 @@
+<div class="graph-container">
+  <div class="graph-header">
+    <h3>{{ title }}</h3>
+  </div>
+  
+  <div class="graph-content">
+    <div *ngIf="!data || data.length === 0" class="no-data">
+      <ion-icon name="analytics-outline"></ion-icon>
+      <p>No data available</p>
+    </div>
+    
+    <div *ngIf="data && data.length > 0" class="chart-wrapper">
+      <canvas #chartCanvas></canvas>
+    </div>
+  </div>
+  
+  <div *ngIf="data && data.length > 0" class="graph-footer">
+    <p>Displaying {{ data.length }} data points</p>
+  </div>
+</div>
