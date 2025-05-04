@@ -37,11 +37,11 @@
             </ion-card-header>
             <ion-card-content>
               <ion-item>
-                <ion-label>Select Patient</ion-label>
-                <ion-select 
-                  placeholder="Choose a patient" 
+                <ion-select
+                  label="Select Patient"
+                  placeholder="Choose a patient"
                   (ionChange)="selectPatient($event)"
-                  interface="action-sheet">
+                  interface="alert">
                   <ion-select-option *ngFor="let patient of patients" [value]="patient._id">
                     {{ patient.name || patient.email }}
                   </ion-select-option>
@@ -96,8 +96,8 @@
             </ion-card-header>
             <ion-card-content>
               <div class="chat-wrapper">
-                <app-chat 
-                  [otherUserId]="selectedPatientId" 
+                <app-chat
+                  [otherUserId]="selectedPatientId"
                   [otherUserName]="selectedPatientName">
                 </app-chat>
               </div>
@@ -106,23 +106,7 @@
         </ion-col>
       </ion-row>
 
-      <!-- Future Features Placeholder -->
-      <ion-row>
-        <ion-col size="12">
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Future Features</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <div class="future-features">
-                <ion-icon name="construct-outline" size="large"></ion-icon>
-                <h3>Coming Soon</h3>
-                <p>Additional features like patient reminders, detailed reports, and treatment recommendations will be available in future updates.</p>
-              </div>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row>
+
     </ion-grid>
   </div>
 </ion-content>

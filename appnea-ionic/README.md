@@ -39,12 +39,22 @@ APPNEA is a digital health application for remote monitoring of patients diagnos
    ```
 
 3. Configure environment variables:
-   - Rename `.env.example` to `.env`
-   - Update the MongoDB URI and JWT secret
+   - Rename `.env.example` to `.env` if it exists
+   - The default configuration uses MongoDB at `mongodb://127.0.0.1:27017/appnea`
 
-4. Start the server:
+4. Start the server (includes database migration):
    ```
    npm run dev
+   ```
+
+   Alternatively, you can use the provided batch script on Windows:
+   ```
+   start-server.bat
+   ```
+
+   Note: You can also run just the migration separately if needed:
+   ```
+   npm run migrate
    ```
 
 ### Frontend Setup
@@ -72,14 +82,15 @@ APPNEA is a digital health application for remote monitoring of patients diagnos
 ## Usage
 
 1. Open your browser and navigate to `http://localhost:8100`
-2. Register a new account
-3. Select your role (Patient or Doctor)
-4. Explore the dashboard based on your role
+2. Log in with one of the test accounts:
+   - Patient: paciente@test.com / paciente123 (Name: "paciente de prueba")
+   - Doctor: doctor@test.com / doctor123 (Name: "doctor de prueba")
+3. Explore the dashboard based on your role
 
 ## Patient Features
 
 - View your physiological data in interactive graphs
-- Generate sample data for demonstration
+- View pre-populated sample data
 - Chat with your doctors
 - Get information from the APPNEA Assistant chatbot
 

@@ -8,8 +8,9 @@ const { protect, authorize } = require('../middleware/auth');
 // @access  Private
 router.get('/me', protect, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
-    
+    console.log('Getting profile for user ID:', req.user._id);
+    const user = await User.findById(req.user._id);
+
     res.status(200).json({
       success: true,
       data: {
@@ -34,13 +35,14 @@ router.get('/me', protect, async (req, res) => {
 router.put('/profile', protect, async (req, res) => {
   try {
     const { name } = req.body;
-    
+
+    console.log('Updating profile for user ID:', req.user._id);
     const user = await User.findByIdAndUpdate(
-      req.user.id,
+      req.user._id,
       { name },
       { new: true, runValidators: true }
     );
-    
+
     res.status(200).json({
       success: true,
       data: {
@@ -65,7 +67,7 @@ router.put('/profile', protect, async (req, res) => {
 router.post('/set-role', protect, async (req, res) => {
   try {
     const { role } = req.body;
-    
+
     // Validate role
     if (!role || !['Patient', 'Doctor'].includes(role)) {
       return res.status(400).json({
@@ -73,7 +75,7 @@ router.post('/set-role', protect, async (req, res) => {
         message: 'Invalid role'
       });
     }
-    
+
     // Check if user already has a role
     if (req.user.role !== null) {
       return res.status(400).json({
@@ -81,13 +83,14 @@ router.post('/set-role', protect, async (req, res) => {
         message: 'User role already set'
       });
     }
-    
+
+    console.log('Setting role for user ID:', req.user._id, 'to:', role);
     const user = await User.findByIdAndUpdate(
-      req.user.id,
+      req.user._id,
       { role },
       { new: true, runValidators: true }
     );
-    
+
     res.status(200).json({
       success: true,
       data: {
@@ -112,7 +115,7 @@ router.post('/set-role', protect, async (req, res) => {
 router.get('/patients', protect, authorize('Doctor'), async (req, res) => {
   try {
     const patients = await User.find({ role: 'Patient' }).select('_id email name');
-    
+
     res.status(200).json({
       success: true,
       data: patients
@@ -132,7 +135,7 @@ router.get('/patients', protect, authorize('Doctor'), async (req, res) => {
 router.get('/doctors', protect, authorize('Patient'), async (req, res) => {
   try {
     const doctors = await User.find({ role: 'Doctor' }).select('_id email name');
-    
+
     res.status(200).json({
       success: true,
       data: doctors

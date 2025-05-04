@@ -95,23 +95,6 @@ export class PatientDashboardPage implements OnInit, OnDestroy {
     this.selectedDoctorName = doctor ? (doctor.name || doctor.email) : 'Unknown Doctor';
   }
 
-  generateMockData() {
-    this.isLoading = true;
-    this.dataService.generateMockData().subscribe({
-      next: data => {
-        this.physiologicalData = data;
-        this.groupDataByType();
-        this.isLoading = false;
-        this.showAlert('Success', 'Mock data generated successfully.');
-      },
-      error: err => {
-        console.error('Error generating mock data:', err);
-        this.isLoading = false;
-        this.showAlert('Error', 'Failed to generate mock data. Please try again.');
-      }
-    });
-  }
-
   logout() {
     this.authService.logout();
   }

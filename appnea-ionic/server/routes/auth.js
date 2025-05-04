@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = require('../models/User');
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
 // @route   POST /api/auth/signup
 // @desc    Register user
@@ -44,12 +44,8 @@ router.post('/signup', async (req, res) => {
       role: user.role
     });
 
-    // Generate token
-    const token = user.getSignedJwtToken();
-
     res.status(201).json({
       success: true,
-      token,
       user: {
         _id: user._id,
         email: user.email,
@@ -119,12 +115,8 @@ router.post('/login', async (req, res) => {
       });
     }
 
-    // Generate token
-    const token = user.getSignedJwtToken();
-
     res.status(200).json({
       success: true,
-      token,
       user: {
         _id: user._id,
         email: user.email,
@@ -223,6 +215,79 @@ router.get('/test-db', async (req, res) => {
       success: false,
       message: 'Server error: ' + err.message,
       stack: err.stack
+    });
+  }
+});
+
+// @route   GET /api/auth/test-token
+// @desc    Test token validation
+// @access  Private
+router.get('/test-token', protect, async (req, res) => {
+  try {
+    // If we get here, the token is valid
+    res.status(200).json({
+      success: true,
+      message: 'Token is valid',
+      user: {
+        id: req.user._id,
+        email: req.user.email,
+        name: req.user.name,
+        role: req.user.role
+      }
+    });
+  } catch (err) {
+    console.error('Test token error:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+});
+
+// @route   GET /api/auth/test-doctor-role
+// @desc    Test doctor role authorization
+// @access  Private/Doctor
+router.get('/test-doctor-role', protect, authorize('Doctor'), async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: 'You have Doctor role access',
+      user: {
+        id: req.user._id,
+        email: req.user.email,
+        name: req.user.name,
+        role: req.user.role
+      }
+    });
+  } catch (err) {
+    console.error('Test doctor role error:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+});
+
+// @route   GET /api/auth/test-patient-role
+// @desc    Test patient role authorization
+// @access  Private/Patient
+router.get('/test-patient-role', protect, authorize('Patient'), async (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: 'You have Patient role access',
+      user: {
+        id: req.user._id,
+        email: req.user.email,
+        name: req.user.name,
+        role: req.user.role
+      }
+    });
+  } catch (err) {
+    console.error('Test patient role error:', err);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
     });
   }
 });

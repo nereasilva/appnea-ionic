@@ -12,13 +12,12 @@ import { User, AuthResponse } from '../models/user.model';
 })
 export class AuthService {
   user = new BehaviorSubject<User | null>(null);
-  private tokenExpirationTimer: any;
 
   constructor(private http: HttpClient, private router: Router) {}
 
   signup(email: string, password: string, name?: string) {
     return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/auth/signup`, {
+      .post<{ success: boolean, user: User }>(`${environment.apiUrl}/auth/signup`, {
         email,
         password,
         name
@@ -30,8 +29,7 @@ export class AuthService {
             resData.user._id,
             resData.user.email,
             resData.user.name,
-            resData.user.role,
-            resData.token
+            resData.user.role
           );
         })
       );
@@ -39,7 +37,7 @@ export class AuthService {
 
   login(email: string, password: string) {
     return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/auth/login`, {
+      .post<{ success: boolean, user: User }>(`${environment.apiUrl}/auth/login`, {
         email,
         password
       })
@@ -50,8 +48,7 @@ export class AuthService {
             resData.user._id,
             resData.user.email,
             resData.user.name,
-            resData.user.role,
-            resData.token
+            resData.user.role
           );
         })
       );
@@ -68,54 +65,33 @@ export class AuthService {
       email: string;
       name?: string;
       role: 'Patient' | 'Doctor' | null;
-      token: string;
-      tokenExpirationDate: string;
     } = JSON.parse(userData);
 
     const loadedUser: User = {
       _id: parsedData._id,
       email: parsedData.email,
       name: parsedData.name,
-      role: parsedData.role,
-      token: parsedData.token
+      role: parsedData.role
     };
 
-    if (loadedUser.token) {
-      this.user.next(loadedUser);
+    this.user.next(loadedUser);
 
-      // Navigate to appropriate page based on role
-      setTimeout(() => {
-        if (loadedUser.role === 'Patient') {
-          this.router.navigate(['/patient-dashboard'], { replaceUrl: true });
-        } else if (loadedUser.role === 'Doctor') {
-          this.router.navigate(['/doctor-dashboard'], { replaceUrl: true });
-        } else {
-          this.router.navigate(['/role-selection'], { replaceUrl: true });
-        }
-      }, 100);
-
-      // Set auto logout if token has expiration
-      const expirationDate = new Date(parsedData.tokenExpirationDate);
-      const expirationDuration = expirationDate.getTime() - new Date().getTime();
-      this.autoLogout(expirationDuration);
-    }
+    // Navigate to appropriate page based on role
+    setTimeout(() => {
+      if (loadedUser.role === 'Patient') {
+        this.router.navigate(['/patient-dashboard'], { replaceUrl: true });
+      } else if (loadedUser.role === 'Doctor') {
+        this.router.navigate(['/doctor-dashboard'], { replaceUrl: true });
+      } else {
+        this.router.navigate(['/role-selection'], { replaceUrl: true });
+      }
+    }, 100);
   }
 
   logout() {
     this.user.next(null);
     localStorage.removeItem('userData');
     this.router.navigate(['/login']);
-
-    if (this.tokenExpirationTimer) {
-      clearTimeout(this.tokenExpirationTimer);
-    }
-    this.tokenExpirationTimer = null;
-  }
-
-  autoLogout(expirationDuration: number) {
-    this.tokenExpirationTimer = setTimeout(() => {
-      this.logout();
-    }, expirationDuration);
   }
 
   setRole(role: 'Patient' | 'Doctor') {
@@ -152,9 +128,7 @@ export class AuthService {
             _id: updatedUser._id,
             email: updatedUser.email,
             name: updatedUser.name,
-            role: updatedUser.role,
-            token: updatedUser.token,
-            tokenExpirationDate: new Date(new Date().getTime() + 3600000).toISOString()
+            role: updatedUser.role
           }));
 
           // Navigate to appropriate dashboard
@@ -173,30 +147,22 @@ export class AuthService {
     userId: string,
     email: string,
     name: string | undefined,
-    role: 'Patient' | 'Doctor' | null,
-    token: string
+    role: 'Patient' | 'Doctor' | null
   ) {
-    // Set token expiration to 1 hour from now
-    const expirationDate = new Date(new Date().getTime() + 3600000);
-
     const user: User = {
       _id: userId,
       email: email,
       name: name,
-      role: role,
-      token: token
+      role: role
     };
 
     this.user.next(user);
-    this.autoLogout(3600000); // 1 hour in milliseconds
 
     localStorage.setItem('userData', JSON.stringify({
       _id: userId,
       email: email,
       name: name,
-      role: role,
-      token: token,
-      tokenExpirationDate: expirationDate.toISOString()
+      role: role
     }));
 
     // Navigate based on role

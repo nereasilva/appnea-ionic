@@ -20,25 +20,23 @@
 
         <ion-card-content>
           <ion-item>
-            <ion-label position="floating">Email</ion-label>
-            <ion-input type="email" formControlName="email"></ion-input>
+            <ion-input type="email" formControlName="email" label="Email"></ion-input>
           </ion-item>
           <ion-note color="danger" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
             Please enter a valid email address
           </ion-note>
 
           <ion-item class="ion-margin-top">
-            <ion-label position="floating">Password</ion-label>
-            <ion-input type="password" formControlName="password"></ion-input>
+            <ion-input type="password" formControlName="password" label="Password"></ion-input>
           </ion-item>
           <ion-note color="danger" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
             Password must be at least 6 characters
           </ion-note>
 
-          <ion-button 
-            expand="block" 
-            type="submit" 
-            class="ion-margin-top" 
+          <ion-button
+            expand="block"
+            type="submit"
+            class="ion-margin-top"
             [disabled]="!loginForm.valid || isLoading">
             Login
           </ion-button>

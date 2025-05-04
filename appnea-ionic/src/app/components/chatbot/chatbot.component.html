@@ -5,7 +5,7 @@
 
   <div class="message-container" #messageContainer>
     <div class="message-list">
-      <div *ngFor="let message of messages" 
+      <div *ngFor="let message of messages"
            [ngClass]="{'message': true, 'sent': message.sender === 'user', 'received': message.sender === 'bot'}">
         <div class="message-content">
           <p>{{ message.text }}</p>
@@ -25,15 +25,16 @@
 
   <div class="message-input">
     <ion-item>
-      <ion-input 
-        placeholder="Ask me about sleep apnea..." 
-        [(ngModel)]="newMessage" 
-        (keyup.enter)="sendMessage()">
+      <ion-input
+        placeholder="Ask me about sleep apnea..."
+        [(ngModel)]="newMessage"
+        (keyup.enter)="sendMessage()"
+        aria-label="Message input">
       </ion-input>
-      <ion-button 
-        slot="end" 
-        fill="clear" 
-        (click)="sendMessage()" 
+      <ion-button
+        slot="end"
+        fill="clear"
+        (click)="sendMessage()"
         [disabled]="!newMessage.trim()">
         <ion-icon name="send"></ion-icon>
       </ion-button>

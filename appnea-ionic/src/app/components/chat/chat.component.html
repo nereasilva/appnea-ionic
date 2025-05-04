@@ -21,7 +21,7 @@
     </div>
 
     <div class="message-list">
-      <div *ngFor="let message of messages" 
+      <div *ngFor="let message of messages"
            [ngClass]="{'message': true, 'sent': message.senderId === currentUser?._id, 'received': message.senderId !== currentUser?._id}">
         <div class="message-content">
           <p>{{ message.content }}</p>
@@ -33,16 +33,17 @@
 
   <div class="message-input">
     <ion-item>
-      <ion-input 
-        placeholder="Type a message..." 
-        [(ngModel)]="newMessage" 
+      <ion-input
+        placeholder="Type a message..."
+        [(ngModel)]="newMessage"
         [disabled]="!otherUserId"
-        (keyup.enter)="sendMessage()">
+        (keyup.enter)="sendMessage()"
+        aria-label="Message input">
       </ion-input>
-      <ion-button 
-        slot="end" 
-        fill="clear" 
-        (click)="sendMessage()" 
+      <ion-button
+        slot="end"
+        fill="clear"
+        (click)="sendMessage()"
         [disabled]="!newMessage.trim() || !otherUserId">
         <ion-icon name="send"></ion-icon>
       </ion-button>

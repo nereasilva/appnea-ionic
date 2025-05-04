@@ -23,15 +23,6 @@
               <p>
                 Monitor your sleep apnea data, chat with your doctor, and get personalized advice from our assistant.
               </p>
-              <ion-button
-                expand="block"
-                color="secondary"
-                (click)="generateMockData()"
-                [disabled]="isLoading"
-                class="ion-margin-top">
-                <ion-icon name="refresh-outline" slot="start"></ion-icon>
-                Generate Sample Data
-              </ion-button>
             </ion-card-content>
           </ion-card>
         </ion-col>
@@ -52,7 +43,7 @@
 
               <div *ngIf="!isLoading && Object.keys(dataByType).length === 0" class="empty-data">
                 <ion-icon name="analytics-outline" size="large"></ion-icon>
-                <p>No health data available yet. Click "Generate Sample Data" to see example visualizations.</p>
+                <p>No health data available. Please contact your healthcare provider.</p>
               </div>
 
               <ion-grid *ngIf="!isLoading && Object.keys(dataByType).length > 0">
@@ -99,8 +90,8 @@
 
               <div *ngIf="doctors.length > 0">
                 <ion-item>
-                  <ion-label>Select Doctor</ion-label>
                   <ion-select
+                    label="Select Doctor"
                     placeholder="Choose a doctor"
                     (ionChange)="selectDoctor($event)"
                     interface="alert">
