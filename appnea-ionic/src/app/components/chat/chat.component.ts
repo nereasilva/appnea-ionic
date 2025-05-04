@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef, AfterViewChecked, OnChanges, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { MessageService } from '../../services/message.service';
@@ -11,7 +11,7 @@ import { User } from '../../models/user.model';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
-export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked, OnChanges {
   @Input() otherUserId: string | null = null;
   @Input() otherUserName: string = '';
   @ViewChild('messageContainer') messageContainer: ElementRef | undefined;
@@ -36,6 +36,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
       if (user) {
         this.messageService.initSocket(user._id);
         this.listenForNewMessages();
+
+        // Load messages if otherUserId is already set
+        if (this.otherUserId) {
+          this.loadMessages();
+        }
       }
     });
   }
@@ -63,7 +68,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   listenForNewMessages() {
     this.messageSubscription = this.messageService.onNewMessage().subscribe(message => {
       // Only add the message if it's from the current chat
-      if (this.otherUserId && 
+      if (this.otherUserId &&
           (message.senderId === this.otherUserId || message.receiverId === this.otherUserId)) {
         this.messages.push(message);
       }
@@ -107,5 +112,14 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         this.error = 'Failed to send message. Please try again.';
       }
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // Check if otherUserId input property has changed
+    if (changes['otherUserId'] && !changes['otherUserId'].firstChange) {
+      // Clear existing messages and load new ones
+      this.messages = [];
+      this.loadMessages();
+    }
   }
 }

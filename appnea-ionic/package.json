@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "serve-quiet": "cross-env NG_CLI_ANALYTICS=false ionic serve --quiet"
+    "serve-quiet": "cross-env NG_CLI_ANALYTICS=false ionic serve --quiet",
+    "dev-full": "concurrently --kill-others-on-fail \"cd server && npm run dev\" \"ionic serve --no-open\""
   },
   "dependencies": {
     "@angular/animations": "^16.0.0",

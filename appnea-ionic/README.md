@@ -59,6 +59,11 @@ APPNEA is a digital health application for remote monitoring of patients diagnos
    npm install
    ```
 
+3. Install the Ionic CLI:
+   ```
+   npm install @ionic/cli
+   ```
+
 3. Start the Ionic application:
    ```
    ionic serve
@@ -84,11 +89,3 @@ APPNEA is a digital health application for remote monitoring of patients diagnos
 - Select a patient to view their physiological data
 - Chat directly with patients
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- This project was created based on a Convex Chef template
-- Special thanks to all contributors

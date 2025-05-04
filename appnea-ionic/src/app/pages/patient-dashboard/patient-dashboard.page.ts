@@ -71,6 +71,7 @@ export class PatientDashboardPage implements OnInit, OnDestroy {
       },
       error: err => {
         console.error('Error loading doctors:', err);
+        this.showAlert('Error', 'Failed to load the list of doctors. Please try again later.');
       }
     });
   }

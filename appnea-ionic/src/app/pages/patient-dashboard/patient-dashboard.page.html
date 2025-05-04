@@ -23,10 +23,10 @@
               <p>
                 Monitor your sleep apnea data, chat with your doctor, and get personalized advice from our assistant.
               </p>
-              <ion-button 
-                expand="block" 
-                color="secondary" 
-                (click)="generateMockData()" 
+              <ion-button
+                expand="block"
+                color="secondary"
+                (click)="generateMockData()"
                 [disabled]="isLoading"
                 class="ion-margin-top">
                 <ion-icon name="refresh-outline" slot="start"></ion-icon>
@@ -92,23 +92,30 @@
               <ion-card-subtitle>Direct communication with your healthcare provider</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              <ion-item>
-                <ion-label>Select Doctor</ion-label>
-                <ion-select 
-                  placeholder="Choose a doctor" 
-                  (ionChange)="selectDoctor($event)"
-                  interface="action-sheet">
-                  <ion-select-option *ngFor="let doctor of doctors" [value]="doctor._id">
-                    {{ doctor.name || doctor.email }}
-                  </ion-select-option>
-                </ion-select>
-              </ion-item>
-              
-              <div class="chat-wrapper">
-                <app-chat 
-                  [otherUserId]="selectedDoctorId" 
-                  [otherUserName]="selectedDoctorName">
-                </app-chat>
+              <div *ngIf="doctors.length === 0" class="empty-data">
+                <ion-icon name="people-outline" size="large"></ion-icon>
+                <p>No doctors available yet. Please try again later.</p>
+              </div>
+
+              <div *ngIf="doctors.length > 0">
+                <ion-item>
+                  <ion-label>Select Doctor</ion-label>
+                  <ion-select
+                    placeholder="Choose a doctor"
+                    (ionChange)="selectDoctor($event)"
+                    interface="alert">
+                    <ion-select-option *ngFor="let doctor of doctors" [value]="doctor._id">
+                      {{ doctor.name || doctor.email }}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+
+                <div class="chat-wrapper">
+                  <app-chat
+                    [otherUserId]="selectedDoctorId"
+                    [otherUserName]="selectedDoctorName">
+                  </app-chat>
+                </div>
               </div>
             </ion-card-content>
           </ion-card>

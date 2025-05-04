@@ -27,10 +27,13 @@ export class SimpleGraphComponent implements OnInit, AfterViewInit {
   }
 
   ngOnChanges() {
-    if (this.chart) {
-      this.chart.destroy();
+    // Only recreate the chart if we have the canvas and data
+    if (this.chartCanvas && this.data && this.data.length > 0) {
+      if (this.chart) {
+        this.chart.destroy();
+      }
+      this.createChart();
     }
-    this.createChart();
   }
 
   createChart() {
@@ -39,10 +42,10 @@ export class SimpleGraphComponent implements OnInit, AfterViewInit {
     }
 
     const ctx = this.chartCanvas.nativeElement.getContext('2d');
-    
+
     // Sort data by timestamp
     const sortedData = [...this.data].sort((a, b) => a.timestamp - b.timestamp);
-    
+
     // Extract values and labels
     const values = sortedData.map(item => item.value);
     const labels = sortedData.map(item => {
