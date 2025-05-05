@@ -12,6 +12,9 @@ import { AppComponent } from './app.component';
 // Auth
 import { AuthInterceptor } from './auth/auth.interceptor';
 
+// Services
+import { PlatformConfigService } from './services/platform-config.service';
+
 // Components
 import { ChatComponent } from './components/chat/chat.component';
 import { ChatbotComponent } from './components/chatbot/chatbot.component';
@@ -46,7 +49,8 @@ import { DoctorDashboardPage } from './pages/doctor-dashboard/doctor-dashboard.p
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    PlatformConfigService
   ],
   bootstrap: [AppComponent]
 })

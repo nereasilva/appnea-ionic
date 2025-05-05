@@ -100,3 +100,39 @@ APPNEA is a digital health application for remote monitoring of patients diagnos
 - Select a patient to view their physiological data
 - Chat directly with patients
 
+## Running on Android with Android Studio
+
+### Prerequisites
+
+- Android Studio
+- JDK 17
+- Android SDK (API level 34)
+- Android device or emulator
+
+### Quick Start
+
+1. **Start the backend and frontend servers**:
+   - Run the provided script: `start-app.bat` (Windows)
+   - This starts both the backend (port 3000) and frontend (port 8100)
+
+2. **Open and run in Android Studio**:
+   - Open Android Studio
+   - Open the `android` folder from this project
+   - Select "app" module in the run configuration
+   - Click the Run button (green triangle)
+   - Choose your device/emulator
+
+3. **Login with test accounts**:
+   - Patient: paciente@test.com / paciente123
+   - Doctor: doctor@test.com / doctor123
+   - (The same as for desktop)
+
+### How It Works
+
+The application uses a platform detection system that automatically configures the correct API URL:
+
+- When running in a web browser, it uses `localhost:3000` for the API
+- When running in Android Studio, it automatically uses `10.0.2.2:3000` (Android's special IP for localhost)
+
+This means you can run both platforms simultaneously without changing any configuration files.
+
