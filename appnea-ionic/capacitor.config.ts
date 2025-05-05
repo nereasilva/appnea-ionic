@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'io.ionic.starter',
-  appName: 'appnea-ionic',
+  appName: 'Appnea',
   webDir: 'dist/app',
   server: {
     // This allows the app to connect to your local development server
