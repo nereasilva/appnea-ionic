@@ -21,6 +21,11 @@ const PhysiologicalDataSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+
+  apnea: {
+    type: Boolean,
+    default: false 
   }
 });
 

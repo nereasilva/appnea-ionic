@@ -52,6 +52,7 @@ export class SimpleGraphComponent implements OnInit, AfterViewInit {
       const date = new Date(item.timestamp);
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     });
+    const pointColors = sortedData.map(item => item.apnea ? '#000000' : this.color);
 
     this.chart = new Chart(ctx, {
       type: 'line',
@@ -66,7 +67,8 @@ export class SimpleGraphComponent implements OnInit, AfterViewInit {
           tension: 0.3,
           fill: true,
           pointRadius: 3,
-          pointHoverRadius: 5
+          pointHoverRadius: 5,
+          pointBackgroundColor: pointColors
         }]
       },
       options: {

@@ -4,4 +4,5 @@ export interface PhysiologicalData {
   timestamp: number;
   dataType: string;
   value: number;
+  apnea: boolean;
 }

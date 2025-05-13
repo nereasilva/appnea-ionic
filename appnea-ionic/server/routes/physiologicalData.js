@@ -57,39 +57,91 @@ router.post('/generate-mock', protect, authorize('Patient'), async (req, res) =>
     // Delete existing data for this patient
     await PhysiologicalData.deleteMany({ patientId: req.user.id });
 
-    const mockData = [];
-    const now = Date.now();
+ const mockData = [];
+  const now = new Date();
+  const start = new Date(now);
+  start.setHours(23, 0, 0, 0);
+  if (now.getHours() < 7) {
+    start.setDate(start.getDate() - 1);
+  }
 
-    // Generate 24 hourly data points for each type
-    for (let i = 0; i < 24; i++) {
-      const timestamp = now - (23 - i) * 60 * 60 * 1000; // Last 24 hours
+  // Values from excel
+  const spo2Values = [
+  9.49E-01,
+  9.63E-01,
+  9.36E-01,
+  9.26E-01,
+  9.40E-01,
+  9.40E-01,
+  9.20E-01,
+  9.50E-01,
+  9.30E-01
 
-      // Heart Rate: Normal range 60-100 bpm with some variation
-      mockData.push({
-        patientId: req.user.id,
-        dataType: "HeartRate",
-        value: 70 + Math.sin(i / 3) * 15 + Math.random() * 5,
-        timestamp
-      });
+  ];
 
-      // SpO2: Normal range 95-100% with occasional dips
-      mockData.push({
-        patientId: req.user.id,
-        dataType: "SpO2",
-        value: 97 + Math.sin(i / 2) * 2 + Math.random(),
-        timestamp
-      });
+  const snoreValues = [
+  5.91E-01,
+  2.99E-01,
+  6.73E-02,
+  8.36E-01,
+  4.15E-01,
+  9.55E-02,
+  5.66E-01,
+  2.22E-02,
+  3.23E-02
 
-      // Snoring: Random events throughout the night (0-100 intensity)
-      if (i > 8 && i < 20) { // More likely during night hours
-        mockData.push({
-          patientId: req.user.id,
-          dataType: "Snoring",
-          value: Math.random() * 60 + Math.sin(i) * 20,
-          timestamp
-        });
-      }
-    }
+  ];
+
+  const heartRateValues = [
+    72.85,
+    72.85,
+    79.135,
+    94.34,
+    71.69,
+    65.84,
+    82.365,
+    75.885,
+    81.375
+  ];
+    const apnea = [
+    false,
+    false,
+    false, 
+    false,
+    false,
+    false,
+    true,
+    true,
+    true
+  ];
+
+  for (let i = 0; i < 9; i++) {
+    const timestamp = new Date(start.getTime() + i * 60 * 60 * 1000);
+
+    mockData.push({
+      patientId,
+      dataType: "SpO2",
+      value: spo2Values[i],
+      timestamp,
+      apnea: apnea[i]
+    });
+
+    mockData.push({
+      patientId,
+      dataType: "Snoring",
+      value: snoreValues[i],
+      timestamp,
+      apnea: apnea[i]
+    });
+
+    mockData.push({
+      patientId,
+      dataType: "HeartRate",
+      value: heartRateValues[i],
+      timestamp,
+      apnea: apnea[i]
+    });
+  }
 
     // Insert mock data
     await PhysiologicalData.insertMany(mockData);
