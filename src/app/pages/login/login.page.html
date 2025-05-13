@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>APPNEA - Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="login-container">
+    <div class="logo-container">
+      <h1>APPNEA</h1>
+      <p>Sleep Apnea Monitoring</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Login</ion-card-title>
+          <ion-card-subtitle>Sign in to your account</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-item>
+            <ion-input type="email" formControlName="email" label="Email"></ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            Please enter a valid email address
+          </ion-note>
+
+          <ion-item class="ion-margin-top">
+            <ion-input type="password" formControlName="password" label="Password"></ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            Password must be at least 6 characters
+          </ion-note>
+
+          <ion-button
+            expand="block"
+            type="submit"
+            class="ion-margin-top"
+            [disabled]="!loginForm.valid || isLoading">
+            Login
+          </ion-button>
+
+          <div class="ion-text-center ion-margin-top">
+            <ion-text>Don't have an account?</ion-text>
+            <ion-button fill="clear" (click)="navigateToRegister()">Register</ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </form>
+  </div>
+</ion-content>

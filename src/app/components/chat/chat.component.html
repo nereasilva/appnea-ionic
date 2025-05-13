@@ -1,0 +1,52 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <h3 *ngIf="otherUserId">Chat with {{ otherUserName }}</h3>
+    <h3 *ngIf="!otherUserId">Select a user to start chatting</h3>
+  </div>
+
+  <div class="message-container" #messageContainer>
+    <div *ngIf="isLoading" class="loading-indicator">
+      <ion-spinner name="dots"></ion-spinner>
+      <p>Loading messages...</p>
+    </div>
+
+    <div *ngIf="!isLoading && messages.length === 0" class="empty-state">
+      <ion-icon name="chatbubble-outline" size="large"></ion-icon>
+      <p>No messages yet. Start the conversation!</p>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>{{ error }}</p>
+    </div>
+
+    <div class="message-list">
+      <div *ngFor="let message of messages"
+           [ngClass]="{'message': true, 'sent': message.senderId === currentUser?._id, 'received': message.senderId !== currentUser?._id}">
+        <div class="message-content">
+          <p>{{ message.content }}</p>
+          <span class="message-time">{{ message.createdAt | date:'shortTime' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="message-input">
+    <ion-item>
+      <ion-input
+        placeholder="Type a message..."
+        [(ngModel)]="newMessage"
+        [disabled]="!otherUserId"
+        (keyup.enter)="sendMessage()"
+        aria-label="Message input">
+      </ion-input>
+      <ion-button
+        slot="end"
+        fill="clear"
+        (click)="sendMessage()"
+        [disabled]="!newMessage.trim() || !otherUserId">
+        <ion-icon name="send"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </div>
+</div>
