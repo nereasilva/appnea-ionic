@@ -51,11 +51,11 @@ export class LoginPage implements OnInit {
         loading.dismiss();
         this.error = null;
       },
-      error: errorMessage => {
+      error: _error => {
         this.isLoading = false;
         loading.dismiss();
-        this.error = errorMessage;
-        this.showAlert('Login Failed', errorMessage);
+        this.error = "Either the email address, the password or both are wrong";
+        this.showAlert('Login failed', "Either the email address, the password or both are wrong");
       }
     });
   }
