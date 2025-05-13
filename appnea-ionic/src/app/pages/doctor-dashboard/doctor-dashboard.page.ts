@@ -35,7 +35,7 @@ export class DoctorDashboardPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.userSubscription = this.authService.user.subscribe(user => {
       this.currentUser = user;
-      if (user) {
+      if (user && user.role === 'Doctor') {
         this.loadPatients();
       }
     });
