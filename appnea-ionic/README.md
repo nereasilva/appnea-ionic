@@ -111,21 +111,50 @@ APPNEA is a digital health application for remote monitoring of patients diagnos
 
 ### Quick Start
 
-1. **Start the backend and frontend servers**:
-   - Run the provided script: `start-app.bat` (Windows)
-   - This starts both the backend (port 3000) and frontend (port 8100)
+1.  **Ensure project dependencies are installed**:
+    If you haven't done so already, or if dependencies have changed, open a terminal in the project root directory (`appnea-ionic/appnea-ionic`) and run:
+    ```bash
+    npm install
+    ```
 
-2. **Open and run in Android Studio**:
-   - Open Android Studio
-   - Open the `android` folder from this project
-   - Select "app" module in the run configuration
-   - Click the Run button (green triangle)
-   - Choose your device/emulator
+2.  **Start the backend and frontend servers**:
+    - In a separate terminal, run the provided script from the project root:
+      ```bash
+      .\start-app.bat
+      ```
+    - This starts both the backend (listening on `http://localhost:3000`) and the Ionic frontend development server (serving at `http://localhost:8100`). Ensure both servers are running before proceeding.
 
-3. **Login with test accounts**:
-   - Patient: paciente@test.com / paciente123
-   - Doctor: doctor@test.com / doctor123
-   - (The same as for desktop)
+3.  **Build the Ionic application for production**:
+    In another terminal, navigate to the project root directory and run:
+    ```bash
+    ionic build
+    ```
+    This command compiles the webapp.
+
+4.  **Sync web assets with the Android project**:
+    Run the following Capacitor command to copy the webapp to the native Android project and update plugins:
+    ```bash
+    npx cap sync android
+    ```
+
+5.  **Open the Android project in Android Studio**:
+    To open the native Android project, run:
+    ```bash
+    npx cap open android
+    ```
+    This command will launch Android Studio and open the `android` subfolder.
+
+6.  **Run the app in Android Studio**:
+    - Once Android Studio has opened and synced the project:
+    - Select the "app" module in the run/debug configurations (it's usually selected by default).
+    - Click the "Run 'app'" button (the green triangle icon).
+    - Choose your connected Android device or a configured Android Virtual Device (Emulator).
+
+7.  **Login with test accounts**:
+    Once the app is running on your device/emulator:
+    - Patient: `paciente@test.com` / `paciente123`
+    - Doctor: `doctor@test.com` / `doctor123`
+    - (These are the same credentials as for the web/desktop version)
 
 ### How It Works
 
@@ -135,4 +164,3 @@ The application uses a platform detection system that automatically configures t
 - When running in Android Studio, it automatically uses `10.0.2.2:3000` (Android's special IP for localhost)
 
 This means you can run both platforms simultaneously without changing any configuration files.
-

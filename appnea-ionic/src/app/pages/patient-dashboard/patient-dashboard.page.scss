@@ -41,3 +41,25 @@
   margin-top: 16px;
   height: 400px;
 }
+
+ion-card-header {
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+}
+
+ion-card-title {
+  margin-bottom: 8px; 
+}
+
+// Add margin to all cards within columns for consistent spacing
+ion-grid > ion-row > ion-col > ion-card {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+// Specifically target the first card (Welcome card) to ensure it has enough top margin
+.dashboard-container > ion-grid > ion-row:first-child > ion-col > ion-card {
+  margin-top: 16px;
+}
