@@ -25,7 +25,7 @@
            [ngClass]="{'message': true, 'sent': message.senderId === currentUser?._id, 'received': message.senderId !== currentUser?._id}">
         <div class="message-content">
           <p>{{ message.content }}</p>
-          <span class="message-time">{{ message.createdAt | date:'shortTime' }}</span>
+          <span class="message-time">{{ message.createdAt | date:'shortTime':'UTC' }} UTC</span>
         </div>
       </div>
     </div>
